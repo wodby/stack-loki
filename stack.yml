@@ -1,0 +1,23 @@
+name: loki
+title: Grafana Loki
+icon: loki
+
+services:
+- name: loki
+  title: Grafana Loki
+  service: loki
+  required: true
+  volumes:
+  - name: data
+    size: 20
+  workloads:
+  - name: main
+    containers:
+    - name: loki
+      resources:
+        request:
+          cpu: 200
+          memory: 512
+        limit:
+          cpu: 1000
+          memory: 2048
