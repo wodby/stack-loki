@@ -1,0 +1,13 @@
+apiVersion: 1
+prune: true
+datasources:
+- name: Loki
+  uid: loki
+  type: loki
+  access: proxy
+  url: http://{{links.loki.host}}:{{links.loki.port}}
+  isDefault: true
+  editable: false
+  jsonData:
+    timeout: 60
+    maxLines: 1000
