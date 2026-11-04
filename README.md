@@ -18,6 +18,7 @@ composition for Grafana Loki.
 ## Service definitions
 
 - [Grafana Loki service](https://github.com/wodby/service-loki)
+- [OpenTelemetry Collector service](https://github.com/wodby/service-opentelemetry-collector)
 - [Grafana service](https://github.com/wodby/service-grafana)
 
 ## What's included
@@ -25,6 +26,7 @@ composition for Grafana Loki.
 | Component / service | Default configuration |
 | --- | --- |
 | Grafana Loki<br>`loki` | required; enabled by default; volumes: `data` 20 GB |
+| OpenTelemetry Collector<br>`otel-collector` | optional; enabled by default; links: `loki` → `loki` |
 | Grafana<br>`grafana` | optional; enabled by default; volumes: `data` 10 GB; links: `loki` → `loki` |
 
 Enabled optional services are selected by default but can be excluded when an
@@ -48,3 +50,24 @@ is needed.
 
 Sign in to Grafana with the generated `admin_username` and `admin_password`
 tokens from the Grafana service.
+
+## Send logs
+
+Applications send logs to the OpenTelemetry Collector over OTLP. Its HTTP port
+has a public HTTPS domain, so applications in other environments, other
+clusters or outside Wodby can use it. Every request needs the Collector's
+generated `ingest_token`.
+
+```
+OTEL_EXPORTER_OTLP_ENDPOINT=https://<Collector domain>
+OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
+OTEL_EXPORTER_OTLP_HEADERS=Authorization=Bearer%20<ingest token>
+OTEL_SERVICE_NAME=<application name>
+OTEL_LOGS_EXPORTER=otlp
+OTEL_TRACES_EXPORTER=none
+OTEL_METRICS_EXPORTER=none
+```
+
+The Collector accepts logs only and forwards them to Loki's OTLP endpoint.
+Search them in Grafana by `service_name`. The Collector is optional: services
+in the same environment can still push to Loki directly.
