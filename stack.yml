@@ -26,11 +26,8 @@ services:
   title: OpenTelemetry Collector
   service: opentelemetry-collector
   links:
-  - name: loki
+  - name: logs
     service: loki
-  configs:
-  - name: config
-    config: configs/otel-collector.yaml
   workloads:
   - name: main
     containers:
