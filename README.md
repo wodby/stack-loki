@@ -26,7 +26,7 @@ composition for Grafana Loki.
 | Component / service | Default configuration |
 | --- | --- |
 | Grafana Loki<br>`loki` | required; enabled by default; volumes: `data` 20 GB |
-| OpenTelemetry Collector<br>`otel-collector` | optional; enabled by default; links: `loki` → `loki` |
+| OpenTelemetry Collector<br>`otel-collector` | optional; enabled by default; links: `logs` → `loki` |
 | Grafana<br>`grafana` | optional; enabled by default; volumes: `data` 10 GB; links: `loki` → `loki` |
 
 Enabled optional services are selected by default but can be excluded when an
